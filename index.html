@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f2">
+  <title>मेरी गतिविधियाँ</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202923;
+      --muted: #7d8980;
+      --paper: #f5f6f2;
+      --card: #fff;
+      --line: #e9ece6;
+      --green: #26734d;
+      --green-dark: #1e5e3e;
+      --green-soft: #eaf4ed;
+      --amber: #bd7b35;
+      --shadow: 0 14px 40px rgba(38, 55, 42, .07);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 10% 0%, rgba(214, 231, 216, .54), transparent 32rem),
+        var(--paper);
+      color: var(--ink);
+      font-family: "Nirmala UI", "Noto Sans Devanagari", "Mangal", system-ui, sans-serif;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .shell { width: min(100% - 40px, 850px); margin: 0 auto; padding: 42px 0 56px; }
+    .topline { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 700; letter-spacing: -.02em; }
+    .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 13px; background: var(--green); color: #fff; font-size: 20px; }
+    .local-note { color: var(--muted); font-size: 13px; display: flex; align-items: center; gap: 7px; }
+    .local-note::before { content: ""; width: 7px; height: 7px; background: #75aa7f; border-radius: 50%; }
+    .intro { margin-bottom: 26px; }
+    .eyebrow { margin: 0 0 9px; color: var(--green); font-size: 12px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 42px); letter-spacing: -.045em; line-height: 1.18; }
+    .subtitle { margin: 10px 0 0; color: var(--muted); font-size: 15px; }
+    .date-row { display: flex; align-items: center; gap: 12px; margin: 25px 0 17px; }
+    .date-card { flex: 1; min-width: 0; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.8); }
+    .date-label { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .date-value { font-size: 17px; font-weight: 700; }
+    input[type="date"] { max-width: 150px; border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px; color: var(--ink); background: #fff; }
+    .today-btn { border: 0; border-radius: 11px; padding: 10px 14px; color: var(--green-dark); background: var(--green-soft); font-weight: 700; white-space: nowrap; }
+    .today-btn:hover { background: #deeee2; }
+    .card { border: 1px solid var(--line); border-radius: 20px; background: var(--card); box-shadow: var(--shadow); }
+    .composer { padding: 20px; }
+    .composer-title { margin: 0 0 14px; font-size: 14px; font-weight: 750; }
+    .form-row { display: flex; gap: 10px; }
+    .activity-input { flex: 1; min-width: 0; padding: 13px 14px; border: 1px solid #dfe5dd; border-radius: 12px; outline: none; color: var(--ink); background: #fcfdfb; }
+    .activity-input:focus, input[type="date"]:focus { border-color: #76a987; box-shadow: 0 0 0 3px rgba(54, 125, 79, .1); }
+    .time-input { width: 135px; padding: 11px 10px; border: 1px solid #dfe5dd; border-radius: 12px; color: var(--ink); background: #fcfdfb; }
+    .voice-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: 1px solid #d7e6d9; border-radius: 12px; padding: 0 13px; color: var(--green-dark); background: var(--green-soft); font-weight: 700; white-space: nowrap; transition: .15s; }
+    .voice-btn:hover { background: #deeee2; }
+    .voice-btn.is-listening { border-color: #e8c6bd; color: #9e493b; background: #fbefed; }
+    .voice-btn svg { width: 17px; height: 17px; }
+    .voice-status { margin: 8px 0 0; color: var(--green); font-size: 12px; }
+    .add-btn { border: 0; border-radius: 12px; padding: 0 18px; background: var(--green); color: white; font-weight: 750; transition: background .15s, transform .15s; }
+    .add-btn:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .hint { margin: 10px 0 0; color: #96a098; font-size: 12px; }
+    .summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 22px 3px 13px; }
+    .summary strong { font-size: 15px; }
+    .progress-copy { color: var(--muted); font-size: 13px; }
+    .progress-track { height: 6px; margin: 0 3px 18px; border-radius: 9px; background: #e7ebe5; overflow: hidden; }
+    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #74aa7b, #26734d); transition: width .25s; }
+    .list-card { overflow: hidden; }
+    .list-head { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 15px 18px; border-bottom: 1px solid var(--line); }
+    .filters { display: flex; gap: 5px; }
+    .filter-btn { border: 0; border-radius: 9px; padding: 8px 11px; color: var(--muted); background: transparent; font-size: 13px; font-weight: 650; }
+    .filter-btn.active { color: var(--green-dark); background: var(--green-soft); }
+    .clear-btn { border: 0; padding: 8px 2px; color: #9a6b58; background: transparent; font-size: 12px; }
+    .clear-btn:hover { color: #874a31; }
+    .task-list { list-style: none; margin: 0; padding: 0; }
+    .task { display: flex; align-items: center; gap: 13px; padding: 15px 19px; border-bottom: 1px solid #f0f2ee; animation: appear .18s ease-out; }
+    .task:last-child { border-bottom: 0; }
+    @keyframes appear { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .check-wrap { position: relative; width: 22px; height: 22px; flex: 0 0 22px; }
+    .check-wrap input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+    .check-mark { width: 22px; height: 22px; display: grid; place-items: center; border: 1.7px solid #cbd4cb; border-radius: 7px; color: transparent; transition: .15s; pointer-events: none; }
+    .check-wrap input:focus-visible + .check-mark { outline: 3px solid rgba(54, 125, 79, .2); }
+    .check-wrap input:checked + .check-mark { border-color: var(--green); background: var(--green); color: #fff; }
+    .check-mark svg { width: 14px; height: 14px; }
+    .task-main { flex: 1; min-width: 0; }
+    .task-name { overflow-wrap: anywhere; font-size: 15px; line-height: 1.5; }
+    .task.done .task-name { color: #9aa39b; text-decoration: line-through; }
+    .task-time { color: #8d978f; font-size: 12px; white-space: nowrap; }
+    .delete-btn { width: 32px; height: 32px; display: grid; place-items: center; flex: 0 0 32px; border: 0; border-radius: 9px; color: #a6afa7; background: transparent; }
+    .delete-btn:hover { color: #a24d40; background: #fbefed; }
+    .delete-btn svg { width: 17px; height: 17px; }
+    .empty { padding: 43px 20px 46px; text-align: center; }
+    .empty-icon { width: 48px; height: 48px; display: grid; place-items: center; margin: 0 auto 13px; border-radius: 16px; background: var(--green-soft); color: var(--green); font-size: 22px; }
+    .empty strong { display: block; font-size: 15px; }
+    .empty p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+    .history-section { margin-top: 29px; }
+    .history-card { overflow: hidden; }
+    .history-summary { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 17px 19px; cursor: pointer; list-style: none; }
+    .history-summary::-webkit-details-marker { display: none; }
+    .history-summary::after { content: "⌄"; order: 2; color: var(--muted); font-size: 20px; transition: transform .16s; }
+    .history-card[open] .history-summary::after { transform: rotate(180deg); }
+    .history-summary-copy { display: flex; flex-direction: column; gap: 3px; }
+    .history-summary-copy strong { font-size: 15px; }
+    .history-summary-copy small { color: var(--muted); font-size: 12px; }
+    .history-count { margin-left: auto; color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .history-content { padding: 0 19px 19px; }
+    .history-tools { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 13px 0; border-top: 1px solid var(--line); }
+    .history-tools p { margin: 0; color: var(--muted); font-size: 12px; }
+    .clear-all-btn, .delete-day-btn, .history-delete-btn { border: 0; color: #9a594a; background: transparent; font-size: 12px; }
+    .clear-all-btn { border-radius: 9px; padding: 9px 11px; background: #fbefed; font-weight: 700; white-space: nowrap; }
+    .clear-all-btn:hover, .delete-day-btn:hover, .history-delete-btn:hover { color: #813d31; background: #f8e5e1; }
+    .history-day { padding: 12px 0 5px; border-top: 1px solid #f0f2ee; }
+    .history-day:first-child { border-top: 0; }
+    .history-day-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 7px; }
+    .history-day-date { font-size: 13px; font-weight: 750; }
+    .history-day-count { margin-left: 8px; color: var(--muted); font-size: 11px; font-weight: 500; }
+    .delete-day-btn { border-radius: 7px; padding: 6px 8px; }
+    .history-entry { display: flex; align-items: center; gap: 9px; min-height: 38px; padding: 5px 4px; }
+    .history-entry-status { width: 19px; flex: 0 0 19px; text-align: center; color: var(--green); font-size: 14px; }
+    .history-entry:not(.done) .history-entry-status { color: #a0aaa1; }
+    .history-entry-text { flex: 1; min-width: 0; overflow-wrap: anywhere; color: #49544b; font-size: 13px; }
+    .history-entry.done .history-entry-text { color: #8e988f; text-decoration: line-through; }
+    .history-entry-time { color: #929b93; font-size: 11px; white-space: nowrap; }
+    .history-delete-btn { flex: 0 0 auto; border-radius: 7px; padding: 6px 8px; }
+    .history-empty { padding: 20px 10px 9px; color: var(--muted); font-size: 13px; text-align: center; }
+    footer { padding-top: 22px; text-align: center; color: #a0a9a1; font-size: 11px; }
+    @media (max-width: 600px) {
+      .shell { width: min(100% - 26px, 850px); padding-top: 24px; }
+      .topline { margin-bottom: 29px; }
+      .local-note { font-size: 11px; }
+      .date-card { padding: 13px; }
+      .date-value { font-size: 15px; }
+      input[type="date"] { width: 130px; padding: 8px 6px; font-size: 12px; }
+      .today-btn { padding: 10px 11px; }
+      .composer { padding: 16px; }
+      .form-row { flex-wrap: wrap; }
+      .activity-input { flex-basis: 100%; }
+      .time-input { flex: 1; }
+      .add-btn { min-height: 44px; }
+      .list-head { padding: 12px 13px; }
+      .filter-btn { padding: 8px 8px; font-size: 12px; }
+      .task { padding: 14px 13px; gap: 10px; }
+      .history-content { padding-right: 13px; padding-left: 13px; }
+      .history-tools { align-items: flex-start; flex-direction: column; }
+      .history-summary { padding: 15px 13px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="topline">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">✓</span><span id="brandText">मेरी गतिविधियाँ</span></div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <button class="today-btn" id="languageBtn" type="button" aria-label="Switch language to English">English</button>
+        <div class="local-note" id="localNote">आपके लैपटॉप में सुरक्षित</div>
+      </div>
+    </div>
+
+    <header class="intro">
+      <p class="eyebrow" id="eyebrow">आपका दिन, आपकी योजना</p>
+      <h1 id="pageTitle">आज क्या करना है?</h1>
+      <p class="subtitle" id="subtitle">अपनी गतिविधियाँ लिखें और पूरी होने पर उन्हें टिक करते जाएँ।</p>
+    </header>
+
+    <section class="date-row" aria-label="तारीख़ चुनें">
+      <div class="date-card">
+        <div><div class="date-label" id="dateCaption">चुनी हुई तारीख़</div><div class="date-value" id="dateLabel"></div></div>
+        <input id="datePicker" type="date" aria-label="गतिविधियों की तारीख़ चुनें">
+      </div>
+      <button class="today-btn" id="todayBtn" type="button">आज</button>
+    </section>
+
+    <form class="card composer" id="activityForm">
+      <p class="composer-title" id="composerTitle">एक नई गतिविधि जोड़ें</p>
+      <div class="form-row">
+        <input class="activity-input" id="activityInput" type="text" maxlength="180" placeholder="उदाहरण: सुबह की सैर, पढ़ाई, मीटिंग…" autocomplete="off" required aria-label="गतिविधि का नाम">
+        <button class="voice-btn" id="voiceBtn" type="button" aria-label="बोलकर लिखें" aria-pressed="false" title="बोलकर गतिविधि लिखें">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="7" y="2.5" width="6" height="10" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M4.5 9.5a5.5 5.5 0 0 0 11 0M10 15v3m-3 0h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <span id="voiceBtnLabel">बोलें</span>
+        </button>
+        <input class="time-input" id="timeInput" type="time" aria-label="समय (ज़रूरी नहीं)" title="समय (ज़रूरी नहीं)">
+        <button class="add-btn" id="addBtn" type="submit">＋ जोड़ें</button>
+      </div>
+      <p class="hint" id="hint">समय देना ज़रूरी नहीं है। आपकी सूची इसी ब्राउज़र में अपने आप सेव होती है।</p>
+      <p class="voice-status" id="voiceStatus" aria-live="polite" hidden></p>
+    </form>
+
+    <section aria-label="गतिविधियों की सूची">
+      <div class="summary"><strong id="listTitle">आपकी गतिविधियाँ</strong><span class="progress-copy" id="progressCopy">0 में से 0 पूरी</span></div>
+      <div class="progress-track" role="progressbar" aria-label="आज की गतिविधियों की प्रगति" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="card list-card">
+        <div class="list-head">
+          <div class="filters" role="group" aria-label="गतिविधियाँ फ़िल्टर करें">
+          <button class="filter-btn active" data-filter="all" type="button">सभी</button>
+          <button class="filter-btn" data-filter="pending" type="button">बाक़ी</button>
+          <button class="filter-btn" data-filter="done" type="button">पूरी</button>
+          </div>
+          <button class="clear-btn" id="clearDoneBtn" type="button" hidden>पूरी गतिविधियाँ हटाएँ</button>
+        </div>
+        <ul class="task-list" id="taskList"></ul>
+        <div class="empty" id="emptyState">
+          <div class="empty-icon" aria-hidden="true">✦</div>
+          <strong id="emptyTitle">अभी कोई गतिविधि नहीं</strong>
+          <p id="emptyText">ऊपर अपनी पहली गतिविधि जोड़ें।</p>
+        </div>
+      </div>
+    </section>
+    <section class="history-section" id="historySection" aria-label="इतिहास">
+      <details class="card history-card" id="historyDetails">
+        <summary class="history-summary">
+          <span class="history-summary-copy"><strong id="historyTitle">इतिहास</strong><small id="historySubtitle">पुरानी गतिविधियाँ और उनका हाल</small></span>
+          <span class="history-count" id="historyCount">0 गतिविधियाँ · 0 दिन</span>
+        </summary>
+        <div class="history-content">
+          <div class="history-tools">
+            <p id="historyInfo">किसी एक गतिविधि को हटाएँ या पूरा इतिहास मिटाएँ।</p>
+            <button class="clear-all-btn" id="clearHistoryBtn" type="button">सारा इतिहास हटाएँ</button>
+          </div>
+          <div id="historyList"></div>
+          <div class="history-empty" id="historyEmpty" hidden>अभी कोई इतिहास नहीं।</div>
+        </div>
+      </details>
+    </section>
+    <footer id="footerNote">🇮🇳 Made in India</footer>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+      const STORAGE_KEY = "meri-gatividhiyan-v1";
+      const $ = (selector) => document.querySelector(selector);
+      const datePicker = $("#datePicker");
+      const activityForm = $("#activityForm");
+      const activityInput = $("#activityInput");
+      const timeInput = $("#timeInput");
+      const voiceBtn = $("#voiceBtn");
+      const voiceStatus = $("#voiceStatus");
+      const taskList = $("#taskList");
+      const historyList = $("#historyList");
+      const historyEmpty = $("#historyEmpty");
+      const clearHistoryBtn = $("#clearHistoryBtn");
+      const emptyState = $("#emptyState");
+      const LANGUAGE_KEY = "meri-gatividhiyan-language";
+      const strings = {
+        hi: {
+          brand: "मेरी गतिविधियाँ", local: "100% सिक्योर", eyebrow: "आपका दिन, आपकी योजना",
+          title: "आज क्या करना है?", subtitle: "अपनी गतिविधियाँ लिखें और पूरी होने पर उन्हें टिक करते जाएँ।",
+          dateCaption: "चुनी हुई तारीख़", dateAria: "गतिविधियों की तारीख़ चुनें", today: "आज",
+          composer: "एक नई गतिविधि जोड़ें", placeholder: "उदाहरण: सुबह की सैर, पढ़ाई, मीटिंग…",
+          activityAria: "गतिविधि का नाम", timeAria: "समय (ज़रूरी नहीं)", add: "＋ जोड़ें",
+          voiceStart: "बोलें", voiceStop: "रोकें", voiceAria: "बोलकर लिखें", voiceTitle: "बोलकर गतिविधि लिखें",
+          voiceListening: "सुन रहा हूँ… बोलना शुरू करें।", voiceDone: "आवाज़ टेक्स्ट में लिख दी गई है। जोड़ने से पहले जाँच लें।",
+          voiceNoSpeech: "आवाज़ नहीं मिली। माइक्रोफ़ोन के पास बोलकर फिर कोशिश करें।",
+          voiceDenied: "माइक्रोफ़ोन की अनुमति नहीं मिली। ब्राउज़र की साइट सेटिंग में अनुमति दें।",
+          voiceUnsupported: "इस ब्राउज़र में वॉइस टाइपिंग उपलब्ध नहीं है। Chrome या Edge में खोलकर देखें।",
+          voiceError: "वॉइस टाइपिंग शुरू नहीं हो सकी। कृपया फिर कोशिश करें।",
+          hint: "समय देना ज़रूरी नहीं है। आपकी सूची इसी ब्राउज़र में अपने आप सेव होती है।",
+          todayList: "आज की गतिविधियाँ", otherList: "इस तारीख़ की गतिविधियाँ", all: "सभी", pending: "बाक़ी", done: "पूरी",
+          filtersAria: "गतिविधियाँ फ़िल्टर करें", clearDone: "पूरी गतिविधियाँ हटाएँ",
+          historyTitle: "इतिहास", historySubtitle: "पुरानी गतिविधियाँ और उनका हाल", historyInfo: "किसी एक गतिविधि को हटाएँ या पूरा इतिहास मिटाएँ।",
+          historyActivities: count => `${count} गतिविधियाँ`, historyDays: count => `${count} दिन`, clearHistory: "सारा इतिहास हटाएँ",
+          deleteDay: "इस दिन का इतिहास हटाएँ", emptyHistory: "अभी कोई इतिहास नहीं।", historyDone: "पूरी", historyPending: "बाक़ी",
+          deleteEntry: "हटाएँ", confirmDeleteEntry: "क्या आप इस गतिविधि को इतिहास से हटाना चाहते हैं?",
+          confirmDeleteDay: date => `क्या आप ${date} की सभी गतिविधियाँ हटाना चाहते हैं?`,
+          confirmDeleteAll: "क्या आप सभी तारीख़ों की सारी गतिविधियाँ और इतिहास हटाना चाहते हैं?",
+          emptyTitle: "अभी कोई गतिविधि नहीं", emptyText: "ऊपर अपनी पहली गतिविधि जोड़ें।",
+          emptyFilter: "यह सूची खाली है", emptyFilterText: "इस फ़िल्टर में दिखाने के लिए कुछ नहीं है।",
+          allDone: "सब पूरा हो गया!", allDoneText: "इस दिन की सभी गतिविधियाँ पूरी हैं।",
+          footer: "🇮🇳 Made in India",
+          check: "गतिविधि पूरी करें", uncheck: "गतिविधि को अधूरा करें", statusDone: "पूरी", statusPending: "बाक़ी",
+          delete: "हटाएँ", deleteTitle: "गतिविधि हटाएँ", saveError: "ब्राउज़र में जगह उपलब्ध नहीं है, इसलिए बदलाव सेव नहीं हो सका।",
+          languageButton: "English", languageAria: "Switch language to English", progress: (done, total) => `${done} में से ${total} पूरी`,
+          progressAria: "गतिविधियों की प्रगति"
+        },
+        en: {
+          brand: "My Activities", local: "100% Secure", eyebrow: "YOUR DAY, YOUR PLAN",
+          title: "What would you like to do today?", subtitle: "Write down your activities and check them off when they’re done.",
+          dateCaption: "Selected date", dateAria: "Choose a date for your activities", today: "Today",
+          composer: "Add a new activity", placeholder: "For example: morning walk, study, meeting…",
+          activityAria: "Activity name", timeAria: "Time (optional)", add: "＋ Add",
+          voiceStart: "Speak", voiceStop: "Stop", voiceAria: "Type by voice", voiceTitle: "Speak to enter an activity",
+          voiceListening: "Listening… start speaking.", voiceDone: "Speech was added as text. Review it before adding.",
+          voiceNoSpeech: "No speech was detected. Speak near the microphone and try again.",
+          voiceDenied: "Microphone permission was denied. Allow it in your browser’s site settings.",
+          voiceUnsupported: "Voice typing isn’t available in this browser. Try opening this in Chrome or Edge.",
+          voiceError: "Voice typing couldn’t start. Please try again.",
+          hint: "Adding a time is optional. Your list is saved automatically in this browser.",
+          todayList: "Today’s activities", otherList: "Activities for this date", all: "All", pending: "To do", done: "Done",
+          filtersAria: "Filter activities", clearDone: "Clear completed activities",
+          historyTitle: "History", historySubtitle: "Past activities and their status", historyInfo: "Delete one activity, a day, or clear all history.",
+          historyActivities: count => `${count} activities`, historyDays: count => `${count} days`, clearHistory: "Delete all history",
+          deleteDay: "Delete this day’s history", emptyHistory: "There’s no history yet.", historyDone: "Done", historyPending: "To do",
+          deleteEntry: "Delete", confirmDeleteEntry: "Delete this activity from history?",
+          confirmDeleteDay: date => `Delete all activities from ${date}?`,
+          confirmDeleteAll: "Delete all activities and history from every date?",
+          emptyTitle: "No activities yet", emptyText: "Add your first activity above.",
+          emptyFilter: "This list is empty", emptyFilterText: "There’s nothing to show for this filter.",
+          allDone: "All done!", allDoneText: "You’ve completed all activities for this day.",
+          footer: "🇮🇳 Made in India",
+          check: "Mark activity as done", uncheck: "Mark activity as not done", statusDone: "Done", statusPending: "To do",
+          delete: "Delete", deleteTitle: "Delete activity", saveError: "There isn’t enough browser storage, so this change could not be saved.",
+          languageButton: "हिन्दी", languageAria: "भाषा हिंदी में बदलें", progress: (done, total) => `${done} of ${total} completed`,
+          progressAria: "Activity progress"
+        }
+      };
+      let savedLanguage = "hi";
+      try { savedLanguage = localStorage.getItem(LANGUAGE_KEY) === "en" ? "en" : "hi"; } catch (_) {}
+      const state = { selectedDate: localDateString(new Date()), filter: "all", language: savedLanguage, activities: readActivities() };
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+      let listening = false;
+      let voiceBaseText = "";
+      let voiceHasResult = false;
+      let voiceErrorOccurred = false;
+
+      function localDateString(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function readActivities() {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+          return Array.isArray(parsed) ? parsed.filter(item => item && typeof item.text === "string" && typeof item.date === "string") : [];
+        } catch (_) {
+          return [];
+        }
+      }
+
+      function save() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state.activities));
+        } catch (_) {
+          alert(strings[state.language].saveError);
+        }
+      }
+
+      function formatDate(value) {
+        const [year, month, day] = value.split("-").map(Number);
+        const date = new Date(year, month - 1, day);
+        const locale = state.language === "hi" ? "hi-IN" : "en-IN";
+        return new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(date);
+      }
+
+      function setVoiceStatus(message) {
+        voiceStatus.textContent = message;
+        voiceStatus.hidden = !message;
+      }
+
+      function setListening(value) {
+        listening = value;
+        const t = strings[state.language];
+        voiceBtn.classList.toggle("is-listening", value);
+        voiceBtn.setAttribute("aria-pressed", String(value));
+        voiceBtn.setAttribute("aria-label", value ? t.voiceStop : t.voiceAria);
+        voiceBtn.title = value ? t.voiceStop : t.voiceTitle;
+        $("#voiceBtnLabel").textContent = value ? t.voiceStop : t.voiceStart;
+      }
+
+      if (recognition) {
+        recognition.interimResults = true;
+        recognition.continuous = false;
+        recognition.onresult = event => {
+          const spokenText = Array.from(event.results).map(result => result[0].transcript).join("").trim();
+          if (spokenText) {
+            voiceHasResult = true;
+            activityInput.value = [voiceBaseText, spokenText].filter(Boolean).join(voiceBaseText ? " " : "");
+          }
+        };
+        recognition.onerror = event => {
+          voiceErrorOccurred = true;
+          const t = strings[state.language];
+          if (event.error === "not-allowed" || event.error === "service-not-allowed") setVoiceStatus(t.voiceDenied);
+          else if (event.error === "no-speech") setVoiceStatus(t.voiceNoSpeech);
+          else setVoiceStatus(t.voiceError);
+          setListening(false);
+        };
+        recognition.onend = () => {
+          setListening(false);
+          if (!voiceErrorOccurred) setVoiceStatus(voiceHasResult ? strings[state.language].voiceDone : strings[state.language].voiceNoSpeech);
+        };
+      }
+
+      function applyLanguage() {
+        const t = strings[state.language];
+        const english = state.language === "en";
+        document.documentElement.lang = state.language;
+        document.title = t.brand;
+        $("#brandText").textContent = t.brand;
+        $("#localNote").textContent = t.local;
+        $("#eyebrow").textContent = t.eyebrow;
+        $("#pageTitle").textContent = t.title;
+        $("#subtitle").textContent = t.subtitle;
+        $("#dateCaption").textContent = t.dateCaption;
+        datePicker.setAttribute("aria-label", t.dateAria);
+        $("#todayBtn").textContent = t.today;
+        $("#languageBtn").textContent = t.languageButton;
+        $("#languageBtn").setAttribute("aria-label", t.languageAria);
+        $("#composerTitle").textContent = t.composer;
+        activityInput.placeholder = t.placeholder;
+        activityInput.setAttribute("aria-label", t.activityAria);
+        timeInput.setAttribute("aria-label", t.timeAria);
+        timeInput.title = t.timeAria;
+        $("#addBtn").textContent = t.add;
+        voiceBtn.setAttribute("aria-label", listening ? t.voiceStop : t.voiceAria);
+        voiceBtn.title = listening ? t.voiceStop : t.voiceTitle;
+        $("#voiceBtnLabel").textContent = listening ? t.voiceStop : t.voiceStart;
+        $("#hint").textContent = t.hint;
+        $(".filters").setAttribute("aria-label", t.filtersAria);
+        document.querySelectorAll(".filter-btn").forEach(button => {
+          button.textContent = t[button.dataset.filter];
+        });
+        $("#clearDoneBtn").textContent = t.clearDone;
+        $("#historyTitle").textContent = t.historyTitle;
+        $("#historySection").setAttribute("aria-label", t.historyTitle);
+        $("#historySubtitle").textContent = t.historySubtitle;
+        $("#historyInfo").textContent = t.historyInfo;
+        clearHistoryBtn.textContent = t.clearHistory;
+        historyEmpty.textContent = t.emptyHistory;
+        $("#footerNote").textContent = t.footer;
+        $("#progressBar").setAttribute("aria-label", t.progressAria);
+        document.querySelectorAll(".filter-btn").forEach(button => {
+          if (english) button.style.fontFamily = "system-ui, sans-serif";
+          else button.style.fontFamily = "inherit";
+        });
+      }
+
+      function iconCheck() {
+        return '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m4.5 10.2 3.4 3.4 7.6-7.7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      }
+
+      function iconTrash() {
+        return '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.8 5.5h12.4M8 5.5V3.8h4v1.7m2.5 0-.7 10.7H6.2L5.5 5.5m2.9 3v4.5m3.2-4.5v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      }
+
+      function render() {
+        const todays = state.activities.filter(item => item.date === state.selectedDate).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+        const completed = todays.filter(item => item.done).length;
+        const percent = todays.length ? Math.round((completed / todays.length) * 100) : 0;
+        $("#dateLabel").textContent = formatDate(state.selectedDate);
+        const t = strings[state.language];
+        $("#listTitle").textContent = state.selectedDate === localDateString(new Date()) ? t.todayList : t.otherList;
+        $("#progressCopy").textContent = t.progress(completed, todays.length);
+        $("#progressFill").style.width = `${percent}%`;
+        $("#progressBar").setAttribute("aria-valuenow", String(percent));
+        $("#clearDoneBtn").hidden = completed === 0;
+
+        const visible = todays.filter(item => state.filter === "all" || (state.filter === "pending" ? !item.done : item.done));
+        taskList.replaceChildren();
+        visible.forEach(item => {
+          const li = document.createElement("li");
+          li.className = `task${item.done ? " done" : ""}`;
+          const label = document.createElement("label");
+          label.className = "check-wrap";
+          label.setAttribute("aria-label", item.done ? t.uncheck : t.check);
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.checked = Boolean(item.done);
+          checkbox.setAttribute("aria-label", `${item.text} — ${item.done ? t.statusDone : t.statusPending}`);
+          checkbox.addEventListener("change", () => {
+            item.done = checkbox.checked;
+            item.completedAt = item.done ? Date.now() : null;
+            save();
+            render();
+          });
+          const check = document.createElement("span");
+          check.className = "check-mark";
+          check.innerHTML = iconCheck();
+          label.append(checkbox, check);
+
+          const main = document.createElement("div");
+          main.className = "task-main";
+          const name = document.createElement("div");
+          name.className = "task-name";
+          name.textContent = item.text;
+          main.append(name);
+
+          li.append(label, main);
+          if (item.time) {
+            const time = document.createElement("time");
+            time.className = "task-time";
+            time.textContent = new Intl.DateTimeFormat(state.language === "hi" ? "hi-IN" : "en-IN", { hour: "numeric", minute: "2-digit" }).format(new Date(`2000-01-01T${item.time}`));
+            time.setAttribute("datetime", item.time);
+            li.append(time);
+          }
+          const remove = document.createElement("button");
+          remove.className = "delete-btn";
+          remove.type = "button";
+          remove.setAttribute("aria-label", `${t.delete}: ${item.text}`);
+          remove.title = t.deleteTitle;
+          remove.innerHTML = iconTrash();
+          remove.addEventListener("click", () => {
+            state.activities = state.activities.filter(activity => activity.id !== item.id);
+            save();
+            render();
+          });
+          li.append(remove);
+          taskList.append(li);
+        });
+
+        const noActivities = todays.length === 0;
+        emptyState.hidden = visible.length !== 0;
+        if (noActivities) {
+          $("#emptyTitle").textContent = t.emptyTitle;
+          $("#emptyText").textContent = t.emptyText;
+        } else {
+          $("#emptyTitle").textContent = state.filter === "pending" ? t.allDone : t.emptyFilter;
+          $("#emptyText").textContent = state.filter === "pending" ? t.allDoneText : t.emptyFilterText;
+        }
+        renderHistory();
+      }
+
+      function renderHistory() {
+        const t = strings[state.language];
+        const grouped = new Map();
+        [...state.activities]
+          .sort((a, b) => b.date.localeCompare(a.date) || (b.createdAt || 0) - (a.createdAt || 0))
+          .forEach(item => {
+            if (!grouped.has(item.date)) grouped.set(item.date, []);
+            grouped.get(item.date).push(item);
+          });
+        const days = [...grouped.entries()];
+        const total = state.activities.length;
+        $("#historyCount").textContent = `${t.historyActivities(total)} · ${t.historyDays(days.length)}`;
+        clearHistoryBtn.hidden = total === 0;
+        historyEmpty.hidden = total !== 0;
+        historyList.replaceChildren();
+
+        days.forEach(([date, items]) => {
+          const day = document.createElement("section");
+          day.className = "history-day";
+          const head = document.createElement("div");
+          head.className = "history-day-head";
+          const dateLabel = document.createElement("div");
+          dateLabel.className = "history-day-date";
+          dateLabel.textContent = formatDate(date);
+          const countLabel = document.createElement("span");
+          countLabel.className = "history-day-count";
+          countLabel.textContent = t.historyActivities(items.length);
+          dateLabel.append(countLabel);
+          const deleteDay = document.createElement("button");
+          deleteDay.type = "button";
+          deleteDay.className = "delete-day-btn";
+          deleteDay.textContent = t.deleteDay;
+          deleteDay.addEventListener("click", () => {
+            if (!confirm(t.confirmDeleteDay(formatDate(date)))) return;
+            state.activities = state.activities.filter(item => item.date !== date);
+            save();
+            render();
+          });
+          head.append(dateLabel, deleteDay);
+          day.append(head);
+
+          items.forEach(item => {
+            const entry = document.createElement("div");
+            entry.className = `history-entry${item.done ? " done" : ""}`;
+            const status = document.createElement("span");
+            status.className = "history-entry-status";
+            status.textContent = item.done ? "✓" : "○";
+            status.setAttribute("aria-label", item.done ? t.historyDone : t.historyPending);
+            const text = document.createElement("span");
+            text.className = "history-entry-text";
+            text.textContent = item.text;
+            entry.append(status, text);
+            if (item.time) {
+              const time = document.createElement("time");
+              time.className = "history-entry-time";
+              time.textContent = new Intl.DateTimeFormat(state.language === "hi" ? "hi-IN" : "en-IN", { hour: "numeric", minute: "2-digit" }).format(new Date(`2000-01-01T${item.time}`));
+              time.setAttribute("datetime", item.time);
+              entry.append(time);
+            }
+            const deleteEntry = document.createElement("button");
+            deleteEntry.type = "button";
+            deleteEntry.className = "history-delete-btn";
+            deleteEntry.textContent = t.deleteEntry;
+            deleteEntry.setAttribute("aria-label", `${t.deleteEntry}: ${item.text}`);
+            deleteEntry.addEventListener("click", () => {
+              if (!confirm(t.confirmDeleteEntry)) return;
+              state.activities = state.activities.filter(activity => activity.id !== item.id);
+              save();
+              render();
+            });
+            entry.append(deleteEntry);
+            day.append(entry);
+          });
+          historyList.append(day);
+        });
+      }
+
+      activityForm.addEventListener("submit", event => {
+        event.preventDefault();
+        const text = activityInput.value.trim();
+        if (!text) { activityInput.focus(); return; }
+        state.activities.push({ id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, text, time: timeInput.value, date: state.selectedDate, done: false, createdAt: Date.now() });
+        save();
+        activityInput.value = "";
+        timeInput.value = "";
+        state.filter = "all";
+        document.querySelectorAll(".filter-btn").forEach(button => button.classList.toggle("active", button.dataset.filter === "all"));
+        render();
+        activityInput.focus();
+      });
+
+      datePicker.addEventListener("change", () => {
+        if (datePicker.value) { state.selectedDate = datePicker.value; render(); }
+      });
+      $("#todayBtn").addEventListener("click", () => {
+        state.selectedDate = localDateString(new Date());
+        datePicker.value = state.selectedDate;
+        render();
+      });
+      voiceBtn.addEventListener("click", () => {
+        if (!recognition) {
+          setVoiceStatus(strings[state.language].voiceUnsupported);
+          return;
+        }
+        if (listening) {
+          recognition.stop();
+          return;
+        }
+        voiceBaseText = activityInput.value.trim();
+        voiceHasResult = false;
+        voiceErrorOccurred = false;
+        setVoiceStatus(strings[state.language].voiceListening);
+        setListening(true);
+        recognition.lang = state.language === "hi" ? "hi-IN" : "en-IN";
+        try {
+          recognition.start();
+        } catch (_) {
+          setListening(false);
+          setVoiceStatus(strings[state.language].voiceError);
+        }
+      });
+      $("#languageBtn").addEventListener("click", () => {
+        if (listening) recognition.stop();
+        setVoiceStatus("");
+        state.language = state.language === "hi" ? "en" : "hi";
+        try { localStorage.setItem(LANGUAGE_KEY, state.language); } catch (_) {}
+        applyLanguage();
+        render();
+      });
+      document.querySelectorAll(".filter-btn").forEach(button => button.addEventListener("click", () => {
+        state.filter = button.dataset.filter;
+        document.querySelectorAll(".filter-btn").forEach(filterButton => filterButton.classList.toggle("active", filterButton === button));
+        render();
+      }));
+      $("#clearDoneBtn").addEventListener("click", () => {
+        state.activities = state.activities.filter(item => item.date !== state.selectedDate || !item.done);
+        save();
+        render();
+      });
+      clearHistoryBtn.addEventListener("click", () => {
+        if (!state.activities.length || !confirm(strings[state.language].confirmDeleteAll)) return;
+        state.activities = [];
+        save();
+        render();
+      });
+
+      datePicker.value = state.selectedDate;
+      applyLanguage();
+      render();
+    })();
+  </script>
+</body>
+</html>
+
