@@ -35,7 +35,7 @@ jobs:
           s = p.read_text()
           marker = '    <uses-permission android:name="android.permission.CAMERA" />'
           if marker not in s:
-              s = s.replace('    <application', marker + '\\n    <uses-permission android:name="android.permission.RECORD_AUDIO" />\\n    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />\\n    <uses-feature android:name="android.hardware.camera" android:required="false" />\\n    <application', 1)
+              s = s.replace('    <application', marker + chr(10) + '    <uses-permission android:name="android.permission.RECORD_AUDIO" />' + chr(10) + '    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />' + chr(10) + '    <uses-feature android:name="android.hardware.camera" android:required="false" />' + chr(10) + '    <application', 1)
               p.write_text(s)
           print(p.read_text())
           PY
