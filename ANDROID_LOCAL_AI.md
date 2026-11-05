@@ -1,6 +1,14 @@
 # Shravan AI — Android Local AI Profile (6 GB RAM)
 
-Status: model/runtime integration plan. The current APK workflow packages the web UI only; it does not yet contain model weights or native inference code.
+Status: UI avatar milestone added; native model/runtime integration remains pending. The current APK workflow packages the web UI only; it does not yet contain model weights or native inference code.
+
+## Digital human avatar
+
+- Selected experience: professional female digital companion.
+- Added an original vector avatar with a professional jacket, subtle orbital lighting, idle state, thinking state, and mouth animation while speech synthesis is active.
+- Chat history is stored in browser IndexedDB on the device. No remote chat endpoint is configured or called by the current interface.
+- The current avatar is a lightweight 2D/vector presentation, not a photorealistic 3D human. A rigged 3D avatar and native lip-sync are a later upgrade.
+- Browser speech synthesis/recognition availability varies by Android device and may use system services; native offline Hindi STT/TTS still needs an Android implementation and offline capability checks.
 
 ## Selected baseline
 
@@ -36,4 +44,4 @@ Status: model/runtime integration plan. The current APK workflow packages the we
 
 ## Honest implementation status
 
-The repository currently contains the Capacitor web shell and an APK build workflow. The native LiteRT-LM bridge, model download/verification, local inference, on-device image prompting, and native Hindi speech adapters are not implemented yet. Do not label the app "fully offline AI" until those components pass device testing.
+The repository currently contains the Capacitor web shell and an APK build workflow. The native LiteRT-LM bridge, model download/verification, local inference, on-device image prompting, and native Hindi speech adapters are not implemented yet. The current screen is a local-first avatar UI, not yet an intelligent offline assistant. Do not label the app "fully offline AI" until the model, native voice and vision components pass device testing.
