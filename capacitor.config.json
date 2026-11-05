@@ -1,7 +1,7 @@
 {
   "appId": "com.shrawansoniji.ai",
   "appName": "Shravan AI",
-  "webDir": ".",
+  "webDir": "app",
   "server": {
     "androidScheme": "https"
   }
