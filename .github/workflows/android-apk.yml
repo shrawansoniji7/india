@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'ai.html'
+      - 'app/**'
       - 'manifest.webmanifest'
       - 'sw.js'
       - 'icon.svg'
