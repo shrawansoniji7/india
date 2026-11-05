@@ -1,0 +1,24 @@
+{
+  "name": "Shravan AI — Personal Intelligence",
+  "short_name": "Shravan AI",
+  "description": "Local-first personal AI assistant",
+  "lang": "hi",
+  "start_url": "./ai.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#080d19",
+  "theme_color": "#080d19",
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
