@@ -27,6 +27,18 @@ jobs:
         run: npm install
       - name: Prepare Android project
         run: npx cap add android
+      - name: Add camera and microphone permissions
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('android/app/src/main/AndroidManifest.xml')
+          s = p.read_text()
+          marker = '    <uses-permission android:name="android.permission.CAMERA" />'
+          if marker not in s:
+              s = s.replace('    <application', marker + '\\n    <uses-permission android:name="android.permission.RECORD_AUDIO" />\\n    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />\\n    <uses-feature android:name="android.hardware.camera" android:required="false" />\\n    <application', 1)
+              p.write_text(s)
+          print(p.read_text())
+          PY
       - name: Build debug APK
         working-directory: android
         run: |
